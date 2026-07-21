@@ -1,0 +1,22 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "next build",
+  "installCommand": "npm install",
+  "functions": {
+    "app/api/chat/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/emergency/trigger/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/risk/zones/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/permits/validate/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/sensors/stream/route.ts": {
+      "maxDuration": 60
+    }
+  }
+}

@@ -1,0 +1,17 @@
+# Dependencies (Vercel installs these itself)
+node_modules
+
+# Local env — NEVER commit secrets
+.env.local
+.env*.local
+
+# Next.js build output (Vercel generates its own)
+.next
+
+# Data scripts — not needed in production
+data/seed.ts
+
+# Scratch / dev files
+*.log
+.DS_Store
+Thumbs.db

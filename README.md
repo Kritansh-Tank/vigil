@@ -87,7 +87,7 @@ Traditional industrial safety systems generate alerts in silos:
 - Compound risk-aware: considers active permits, sensor levels, worker count
 - OISD-116 Section 7.1 compliant response structure
 - Auto-downloads PDF incident report
-- PDF stored to AWS S3 with pre-signed URL
+- PDF report download and JSON stored to AWS S3 with pre-signed URL
 - Email alert via AWS SES with full report details
 
 ---
@@ -99,7 +99,7 @@ Traditional industrial safety systems generate alerts in silos:
 | Framework | Next.js 16 (App Router), React 19, TypeScript |
 | AI / LLM | Groq API (`llama-3.1-8b-instant`), LangChain.js |
 | Database | MongoDB Atlas (sensors, permits, incidents, regulations) |
-| Cloud | AWS SES (email alerts), AWS S3 (PDF storage) |
+| Cloud | AWS SES (email alerts), AWS S3 (JSON storage) |
 | Styling | Vanilla CSS (custom design system) |
 | PDF | jsPDF (client-side), PDFKit (server-side) |
 | Streaming | Server-Sent Events (SSE) for live sensor data + RAG responses |
@@ -139,7 +139,7 @@ vigil/
 │   │   └── emergencyResponse.ts
 │   ├── aws/
 │   │   ├── ses.ts            # Email alert dispatch
-│   │   └── s3.ts             # PDF upload + presigned URLs
+│   │   └── s3.ts             # JSON upload + presigned URLs
 │   ├── db/mongodb.ts         # MongoDB Atlas connection
 │   ├── simulation/
 │   │   └── sensorSimulator.ts # Live sensor simulation engine
@@ -155,7 +155,7 @@ vigil/
 - Node.js 18+
 - MongoDB Atlas cluster
 - Groq API key (free tier works — 131K TPM limit)
-- AWS account (SES + S3, optional for email/PDF features)
+- AWS account (SES + S3, for email/PDF features)
 
 ### 1. Clone & Install
 
@@ -176,7 +176,7 @@ MONGODB_URI=mongodb+srv://<user>:<pass>@<cluster>.mongodb.net/vigil
 # Groq (AI)
 GROQ_API_KEY=gsk_...
 
-# AWS (optional — for email alerts and PDF storage)
+# AWS (for email alerts and JSON storage)
 AWS_REGION=ap-south-1
 AWS_ACCESS_KEY_ID=...
 AWS_SECRET_ACCESS_KEY=...

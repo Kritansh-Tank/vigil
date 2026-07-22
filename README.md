@@ -233,7 +233,7 @@ A coke oven battery with 6 zones (A–F), monitoring:
 - **TEMP** — Temperature (°C) · Warn 65 · Danger 85
 - **PRESSURE** — Gas Pressure (kPa) · Warn 120 · Danger 150
 
-Risk thresholds follow OISD-116 norms. Auto-emergency triggers when compound score exceeds 75, with a 5-minute cooldown per zone to prevent alert fatigue.
+Risk thresholds follow OISD-116 norms. Auto-emergency triggers when compound score exceeds 85, with a 5-minute cooldown per zone to prevent alert fatigue.
 
 ---
 

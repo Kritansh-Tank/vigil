@@ -11,14 +11,14 @@ import {
 const NAV = [
   {
     section: "OPERATIONS", items: [
-      { label: "Command Centre",      icon: LayoutDashboard, href: "/dashboard"    },
-      { label: "Permit Intelligence", icon: ClipboardList,   href: "/permits"      },
+      { label: "Command Centre", icon: LayoutDashboard, href: "/dashboard" },
+      { label: "Permit Intelligence", icon: ClipboardList, href: "/permits" },
     ]
   },
   {
     section: "INTELLIGENCE", items: [
-      { label: "Incident Intelligence", icon: Brain,        href: "/intelligence"  },
-      { label: "Emergency Response",    icon: AlertOctagon, href: "/emergency"     },
+      { label: "Incident Intelligence", icon: Brain, href: "/intelligence" },
+      { label: "Emergency Response", icon: AlertOctagon, href: "/emergency" },
     ]
   },
 ];
@@ -42,7 +42,7 @@ export default function Sidebar() {
       <aside className="sidebar">
         {/* Logo */}
         <div style={{ padding: "18px 16px 14px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+          <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, textDecoration: "none", cursor: "pointer" }}>
             <div>
               <p style={{ fontWeight: 800, fontSize: 16, color: "#ffffff", lineHeight: 1, letterSpacing: "-0.02em" }}>
                 VIGIL
@@ -51,7 +51,7 @@ export default function Sidebar() {
                 See Every Risk. Before It Sees You.
               </p>
             </div>
-          </div>
+          </Link>
           <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "7px 12px", borderRadius: 8, background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.2)" }}>
             <div className="anim-blink" style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e", flexShrink: 0 }} />
             <span style={{ fontSize: 11, fontWeight: 600, color: "#4ade80" }}>Live Monitoring Active</span>

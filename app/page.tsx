@@ -100,7 +100,8 @@ export default function LandingPage() {
         padding: "0 40px", height: 60,
         display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
           <ShieldCheck size={22} color="#dc2626" />
           <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.02em", color: scrollY > 20 ? "#0f172a" : "#fff" }}>VIGIL</span>
         </div>

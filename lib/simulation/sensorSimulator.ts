@@ -23,7 +23,8 @@ type ScenarioType = "NORMAL" | "SCENARIO_1" | "SCENARIO_2" | "SCENARIO_3";
 function getScenarioMultiplier(
   zone: ZoneId,
   sensor: SensorType,
-  step: number
+  step: number,
+  currentScenario: ScenarioType
 ): number {
   const progress = Math.min(step / 40, 1); // 40 steps = ~2 minutes
 
@@ -57,10 +58,11 @@ function getScenarioMultiplier(
 function generateReading(
   zone: ZoneId,
   sensorType: SensorType,
-  step: number
+  step: number,
+  currentScenario: ScenarioType
 ): SensorReading {
   const baseline = BASELINES[zone][sensorType];
-  const multiplier = getScenarioMultiplier(zone, sensorType, step);
+  const multiplier = getScenarioMultiplier(zone, sensorType, step, currentScenario);
 
   // Add gaussian noise (±3% of baseline)
   const noise = baseline * 0.03 * (Math.random() * 2 - 1);
@@ -131,7 +133,7 @@ export async function generateAndStoreTick(): Promise<SensorReading[]> {
 
   for (const zone of zones) {
     for (const sensor of sensors) {
-      const reading = generateReading(zone, sensor, scenarioStep);
+      const reading = generateReading(zone, sensor, scenarioStep, currentScenario);
       readings.push(reading);
     }
   }

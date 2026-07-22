@@ -15,10 +15,6 @@ const BASELINES: Record<ZoneId, Record<SensorType, number>> = {
 
 type ScenarioType = "NORMAL" | "SCENARIO_1" | "SCENARIO_2" | "SCENARIO_3";
 
-let currentScenario: ScenarioType = "NORMAL";
-let scenarioStep = 0;
-let scenarioStartTime: Date | null = null;
-
 // ─── Scenario progressions ────────────────────────────────────────────────────
 // Scenario 1: Vizag Coke Oven Gas Leak + Active PTW (Zone B CH4 rises)
 // Scenario 2: Confined Space + Shift Changeover + H2S Rise (Zone D)
@@ -82,25 +78,51 @@ function generateReading(
   };
 }
 
+type ScenarioState = {
+  active: ScenarioType;
+  step: number;
+  started_at: Date | null;
+};
+
+// ─── MongoDB-backed scenario state (survives serverless cold starts) ───────────
+async function getStateFromDb(): Promise<ScenarioState> {
+  const db = await getDb();
+  const doc = await db.collection("simulation_state").findOne({ _id: "current" as never });
+  if (!doc) return { active: "NORMAL", step: 0, started_at: null };
+  return { active: doc.active, step: doc.step, started_at: doc.started_at };
+}
+
+async function saveStateToDb(state: ScenarioState) {
+  const db = await getDb();
+  await db.collection("simulation_state").updateOne(
+    { _id: "current" as never },
+    { $set: { active: state.active, step: state.step, started_at: state.started_at } },
+    { upsert: true }
+  );
+}
+
 // ─── Public API ───────────────────────────────────────────────────────────────
-export function setScenario(scenario: ScenarioType) {
-  currentScenario = scenario;
-  scenarioStep = 0;
-  scenarioStartTime = new Date();
+export async function setScenario(scenario: ScenarioType) {
+  await saveStateToDb({ active: scenario, step: 0, started_at: new Date() });
   console.log(`[Simulator] Scenario set to: ${scenario}`);
 }
 
-export function getScenarioState() {
+export async function getScenarioState() {
+  const state = await getStateFromDb();
   return {
-    active: currentScenario,
-    started_at: scenarioStartTime,
-    progress: Math.min((scenarioStep / 40) * 100, 100),
+    active: state.active,
+    started_at: state.started_at,
+    progress: Math.min((state.step / 40) * 100, 100),
   };
 }
 
 export async function generateAndStoreTick(): Promise<SensorReading[]> {
   const db = await getDb();
   const collection = db.collection("sensors");
+
+  // Read shared scenario state from MongoDB
+  const state = await getStateFromDb();
+  const { active: currentScenario, step: scenarioStep } = state;
 
   const zones: ZoneId[] = ["ZONE_A", "ZONE_B", "ZONE_C", "ZONE_D", "ZONE_E", "ZONE_F"];
   const sensors: SensorType[] = ["CH4", "CO", "H2S", "SO2", "TEMP", "PRESSURE"];
@@ -114,23 +136,24 @@ export async function generateAndStoreTick(): Promise<SensorReading[]> {
     }
   }
 
-  // Insert all readings (cast to avoid ObjectId vs string _id conflict — Mongo generates _id on insert)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await collection.insertMany(readings as any[]);
 
-  // Advance scenario
+  // Advance scenario step and auto-reset after 60 steps
   if (currentScenario !== "NORMAL") {
-    scenarioStep++;
-    // Auto-reset after completion
-    if (scenarioStep > 60) {
-      currentScenario = "NORMAL";
-      scenarioStep = 0;
-      scenarioStartTime = null;
+    const nextStep = scenarioStep + 1;
+    if (nextStep > 60) {
+      await saveStateToDb({ active: "NORMAL", step: 0, started_at: null });
+    } else {
+      await saveStateToDb({ active: currentScenario, step: nextStep, started_at: state.started_at });
     }
   }
 
   return readings;
 }
+
+
+
 
 export async function getLatestReadings(): Promise<SensorReading[]> {
   const db = await getDb();

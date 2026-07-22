@@ -8,13 +8,14 @@ export async function POST(req: NextRequest) {
     if (!valid.includes(scenario)) {
       return NextResponse.json({ error: "Invalid scenario" }, { status: 400 });
     }
-    setScenario(scenario);
-    return NextResponse.json({ success: true, state: getScenarioState() });
+    await setScenario(scenario);
+    return NextResponse.json({ success: true, state: await getScenarioState() });
   } catch (e) {
     return NextResponse.json({ error: "Failed to set scenario" }, { status: 500 });
   }
 }
 
 export async function GET() {
-  return NextResponse.json(getScenarioState());
+  return NextResponse.json(await getScenarioState());
 }
+

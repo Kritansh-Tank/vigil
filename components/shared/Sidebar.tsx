@@ -127,10 +127,12 @@ export default function Sidebar() {
           }}>
             {/* Header */}
             <div style={{ padding: "16px", borderBottom: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div>
-                <p style={{ fontWeight: 800, fontSize: 15, color: "#ffffff", lineHeight: 1 }}>VIGIL</p>
-                <p style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", marginTop: 3 }}>See Every Risk. Before It Sees You.</p>
-              </div>
+              <Link href="/" style={{ textDecoration: "none" }}>
+                <div>
+                  <p style={{ fontWeight: 800, fontSize: 15, color: "#ffffff", lineHeight: 1 }}>VIGIL</p>
+                  <p style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", marginTop: 3 }}>See Every Risk. Before It Sees You.</p>
+                </div>
+              </Link>
               <button onClick={() => setMenuOpen(false)}
                 style={{ width: 30, height: 30, borderRadius: 7, background: "rgba(255,255,255,0.07)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                 <X size={14} color="rgba(255,255,255,0.6)" />

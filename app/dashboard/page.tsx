@@ -57,17 +57,29 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    const sse = new EventSource("/api/sensors/stream");
-    sse.onopen = () => setConnected(true);
-    sse.onerror = () => setConnected(false);
-    sse.onmessage = (e) => {
+    let cancelled = false;
+
+    async function tick() {
+      if (cancelled) return;
       try {
-        const { type, payload } = JSON.parse(e.data);
-        if (type === "readings") { setReadings(payload); setLastUpdate(new Date()); }
-      } catch { }
-    };
-    return () => sse.close();
+        const res = await fetch("/api/sensors/stream");
+        if (!res.ok) throw new Error("fetch failed");
+        const { type, payload } = await res.json();
+        if (type === "readings") {
+          setReadings(payload);
+          setLastUpdate(new Date());
+          setConnected(true);
+        }
+      } catch {
+        setConnected(false);
+      }
+    }
+
+    tick(); // immediate first tick
+    const iv = setInterval(tick, 3000);
+    return () => { cancelled = true; clearInterval(iv); };
   }, []);
+
 
   useEffect(() => {
     fetchRisks(); fetchAlerts(); fetchTrends(); fetchShift();

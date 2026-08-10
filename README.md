@@ -1,4 +1,4 @@
-# ⚠️ VIGIL — Industrial Safety Intelligence Platform
+# VIGIL — Industrial Safety Intelligence Platform
 
 > **See Every Risk. Before It Sees You.**
 

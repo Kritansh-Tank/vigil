@@ -4,7 +4,7 @@
 
 VIGIL is a real-time compound risk intelligence platform for heavy industrial facilities. It fuses live sensor streams, active work permits, shift context, and a decade of incident records to surface risks that individual data points alone cannot reveal — then acts on them.
 
-Built for the **ET AI Hackathon 2.0**, VIGIL is anchored in a real event: the **January 2025 Visakhapatnam Steel Plant incident**, where data was present but unacted upon. 6,500+ industrial workers die annually in India. VIGIL is the intelligence layer that acts.
+VIGIL is anchored in a real event: the **January 2025 Visakhapatnam Steel Plant incident**, where data was present but unacted upon. 6,500+ industrial workers die annually in India. VIGIL is the intelligence layer that acts.
 
 ---
 
